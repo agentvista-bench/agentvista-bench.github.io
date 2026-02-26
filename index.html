@@ -1,0 +1,2925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios">
+  <meta name="description" content="AgentVista is a benchmark for evaluating generalist multimodal agents on realistic, ultra-challenging tasks requiring long-horizon interleaved tool use grounded in visual evidence.">
+  <meta name="keywords" content="multimodal agents, benchmark, visual reasoning, tool use, AgentVista, multimodal evaluation">
+  <meta name="author" content="Zhaochen Su, Jincheng Gao, Hangyu Guo, Zhenhua Liu, Lueyang Zhang, Xinyu Geng, Shijue Huang, Peng Xia, Guanyu Jiang, Cheng Wang, Yue Zhang, Yi R. Fung, Junxian He">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="HKUST NLP">
+  <meta property="og:title" content="AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios">
+  <meta property="og:description" content="A benchmark with 209 tasks spanning 25 sub-domains, evaluating multimodal agents on realistic long-horizon tool use. Best model achieves only 27.3% accuracy.">
+  <meta property="og:url" content="https://agentvista.github.io">
+  <meta property="og:image" content="https://agentvista.github.io/static/images/pipeline.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:published_time" content="2026-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Zhaochen Su">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="multimodal agents">
+  <meta property="article:tag" content="benchmark">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios">
+  <meta name="twitter:description" content="A benchmark with 209 tasks spanning 25 sub-domains, evaluating multimodal agents on realistic long-horizon tool use. Best model achieves only 27.3% accuracy.">
+  <meta name="twitter:image" content="https://agentvista.github.io/static/images/pipeline.png">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios">
+  <meta name="citation_author" content="Su, Zhaochen">
+  <meta name="citation_author" content="Gao, Jincheng">
+  <meta name="citation_author" content="Guo, Hangyu">
+  <meta name="citation_author" content="Liu, Zhenhua">
+  <meta name="citation_author" content="Zhang, Lueyang">
+  <meta name="citation_author" content="Geng, Xinyu">
+  <meta name="citation_author" content="Huang, Shijue">
+  <meta name="citation_author" content="Xia, Peng">
+  <meta name="citation_author" content="Jiang, Guanyu">
+  <meta name="citation_author" content="Wang, Cheng">
+  <meta name="citation_author" content="Zhang, Yue">
+  <meta name="citation_author" content="Fung, Yi R.">
+  <meta name="citation_author" content="He, Junxian">
+  <meta name="citation_publication_date" content="2026">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>AgentVista</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="apple-touch-icon" href="static/images/favicon.ico">
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios",
+    "description": "A benchmark for evaluating generalist multimodal agents on realistic, ultra-challenging tasks requiring long-horizon interleaved tool use grounded in visual evidence.",
+    "author": [
+      {"@type": "Person", "name": "Zhaochen Su", "affiliation": {"@type": "Organization", "name": "HKUST"}},
+      {"@type": "Person", "name": "Jincheng Gao", "affiliation": {"@type": "Organization", "name": "HKUST"}},
+      {"@type": "Person", "name": "Hangyu Guo", "affiliation": {"@type": "Organization", "name": "HKUST"}},
+      {"@type": "Person", "name": "Junxian He", "affiliation": {"@type": "Organization", "name": "HKUST"}}
+    ],
+    "datePublished": "2026-01-01",
+    "publisher": {"@type": "Organization", "name": "HKUST"},
+    "keywords": ["multimodal agents", "benchmark", "visual reasoning", "tool use", "long-horizon planning"],
+    "isAccessibleForFree": true
+  }
+  </script>
+
+  <style>
+    /* AgentVista custom styles */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--background-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-color);
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Leaderboard table */
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .leaderboard-table thead th {
+      background: var(--text-primary);
+      color: white;
+      padding: 0.85rem 0.75rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border: none;
+    }
+    .leaderboard-table thead th:first-child {
+      text-align: left;
+      padding-left: 1rem;
+    }
+    .leaderboard-table tbody td {
+      padding: 0.7rem 0.75rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+      font-variant-numeric: tabular-nums;
+    }
+    .leaderboard-table tbody td:first-child {
+      text-align: left;
+      font-weight: 600;
+      padding-left: 1rem;
+    }
+    .leaderboard-table tbody tr:hover {
+      background: var(--background-accent);
+    }
+    .leaderboard-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .leaderboard-table td.col-sep,
+    .leaderboard-table th.col-sep {
+      border-left: 2px solid var(--border-color);
+    }
+    .best-score {
+      font-weight: 700;
+      color: #dc2626;
+    }
+    .second-score {
+      text-decoration: underline;
+    }
+    .highlight-row {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+    }
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 1.5rem 0;
+      border-radius: var(--border-radius);
+    }
+
+    /* Tool cards */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .tool-card {
+      background: var(--background-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .tool-card img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 0.75rem;
+    }
+    .tool-card h4 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    .tool-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Figure captions */
+    .figure-caption {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 1rem;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* Comparison table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .comparison-table thead th {
+      background: var(--text-primary);
+      color: white;
+      padding: 0.75rem 0.6rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+    .comparison-table thead th:first-child {
+      text-align: left;
+      padding-left: 1rem;
+    }
+    .comparison-table tbody td {
+      padding: 0.6rem 0.6rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comparison-table tbody td:first-child {
+      text-align: left;
+      font-weight: 600;
+      padding-left: 1rem;
+    }
+    .comparison-table tbody tr:hover {
+      background: var(--background-accent);
+    }
+    .comparison-table tbody tr:last-child {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      font-weight: 600;
+    }
+    .check-mark { color: #16a34a; font-weight: bold; }
+    .cross-mark { color: #dc2626; font-weight: bold; }
+
+    /* Section divider */
+    .section-divider {
+      width: 80px;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Image figure styling */
+    .paper-figure {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      max-width: 100%;
+      height: auto;
+    }
+    .paper-figure:hover {
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Key findings */
+    .finding-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: var(--background-primary);
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary-color);
+      box-shadow: var(--shadow-sm);
+    }
+    .finding-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      font-weight: 800;
+      color: var(--primary-color);
+    }
+    .finding-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .finding-text strong {
+      color: var(--text-primary);
+    }
+
+    /* Tab system for analysis */
+    .tab-container {
+      margin: 2rem 0;
+    }
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 0.6rem 1.25rem;
+      border: 2px solid var(--border-color);
+      background: var(--background-primary);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      color: var(--text-secondary);
+    }
+    .tab-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    .tab-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Case study styles */
+    .case-content {
+      display: none;
+    }
+    .case-content.active {
+      display: block;
+    }
+    .case-card {
+      background: var(--background-primary);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .case-card.case-success {
+      border-top: 4px solid #16a34a;
+    }
+    .case-card.case-failure {
+      border-top: 4px solid #dc2626;
+    }
+    .case-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--background-accent);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .case-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .case-badge.success {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .case-badge.failure {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+    .case-model {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .case-task {
+      padding: 1.25rem 1.5rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .case-gt {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      background: var(--background-accent);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .case-images {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .case-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-light);
+      margin-bottom: 0.75rem;
+    }
+    .case-img-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    .case-img-row img {
+      max-height: 160px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      object-fit: cover;
+    }
+    .case-trajectory {
+      padding: 1.25rem 1.5rem;
+    }
+    .traj-step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+    .step-badge {
+      flex-shrink: 0;
+      background: var(--primary-color);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      margin-top: 0.1rem;
+    }
+    .step-content {
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .step-tool {
+      display: inline-block;
+      background: var(--background-accent);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.15rem 0.6rem;
+      border-radius: 6px;
+      margin-right: 0.5rem;
+      font-family: 'SF Mono', 'Monaco', monospace;
+    }
+    .step-thought, .step-action, .step-obs {
+      margin-top: 0.5rem;
+      line-height: 1.7;
+    }
+    .step-thought {
+      color: #374151;
+      background: #f9fafb;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      border-left: 3px solid #6366f1;
+    }
+    .step-action {
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 0.88rem;
+      background: #f3f4f6;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+    }
+    .step-action pre {
+      margin: 0.4rem 0 0 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .step-obs {
+      color: #6b7280;
+      font-style: italic;
+      padding: 0.3rem 0;
+    }
+    .step-desc {
+      color: var(--text-secondary);
+    }
+    .step-images {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .step-images img {
+      max-height: 120px;
+      border-radius: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+    .case-answer {
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      position: relative;
+    }
+    .case-answer.case-correct {
+      background: #f0fdf4;
+      border-top: 1px solid #bbf7d0;
+    }
+    .case-answer.case-wrong {
+      background: #fef2f2;
+      border-top: 1px solid #fecaca;
+    }
+    .answer-mark {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+    }
+    .correct-mark {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .wrong-mark {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    /* Data Examples Showcase */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.2rem;
+    }
+    .showcase-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .showcase-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .showcase-header {
+      padding: 0.7rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid #f3f4f6;
+      flex-wrap: wrap;
+    }
+    .showcase-domain {
+      display: inline-block;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .showcase-subdomain {
+      font-size: 0.82rem;
+      color: #6b7280;
+    }
+    .showcase-id {
+      margin-left: auto;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+    .showcase-images {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.7rem;
+      overflow-x: auto;
+      background: #f9fafb;
+      align-items: center;
+    }
+    .showcase-images img {
+      max-height: 130px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .showcase-question {
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #1f2937;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+    .showcase-answer {
+      padding: 0.6rem 1rem 0.8rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      background: #f0fdf4;
+      border-top: 1px solid #d1fae5;
+      color: #065f46;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+    .showcase-card[data-hidden="true"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span class="dnerf">AgentVista</span>: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios</h1>
+            <div class="is-size-5 publication-authors" style="margin-bottom: 0.2rem;">
+              <span class="author-block"><a href="https://zhaochensu.github.io/" target="_blank">Zhaochen Su</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Jincheng Gao</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Hangyu Guo</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Zhenhua Liu</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Lueyang Zhang</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Xinyu Geng</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Shijue Huang</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Peng Xia</a><sup>4</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Guanyu Jiang</a><sup>2</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Cheng Wang</a><sup>3</sup>,</span>
+              <span class="author-block"><a href="#" target="_blank">Yue Zhang</a><sup>1</sup></span>
+            </div>
+            <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
+              <span class="author-block"><a href="#" target="_blank">Yi R. (May) Fung</a><sup>1</sup>,</span>
+              <span class="author-block"><a href="https://jxhe.github.io/" target="_blank">Junxian He</a><sup>1</sup></span>
+            </div>
+
+            <div class="is-size-6 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><sup>1</sup>HKUST &nbsp; <sup>2</sup>Zhejiang University &nbsp; <sup>3</sup>NUS &nbsp; <sup>4</sup>UNC</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-database"></i></span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser / Overview Figure -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body" style="padding-top: 1rem;">
+        <img src="static/images/example_task.png" alt="AgentVista representative task example" class="paper-figure" style="width: 100%;">
+        <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+          A representative <strong>AgentVista</strong> task grounded in a real home-renovation scenario. The agent needs to match flooring styles across images, verify the target room, retrieve product specifications, and compute final cost via interleaved tool use.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Real-world multimodal agents solve multi-step workflows grounded in visual evidence. For example, an agent can troubleshoot a device by linking a wiring photo to a schematic and validating the fix with online documentation, or plan a trip by interpreting a transit map and checking schedules under routing constraints. However, existing multimodal benchmarks mainly evaluate single-turn visual reasoning or specific tool skills, and they do not fully capture the realism, visual subtlety, and long-horizon tool use that practical agents require. We introduce <strong>AgentVista</strong>, a benchmark for generalist multimodal agents that spans <strong>25 sub-domains</strong> across <strong>7 categories</strong>, pairing realistic and detail-rich visual scenarios with natural hybrid tool use. Tasks require long-horizon tool interactions across modalities, including web search, image search, page navigation, and code-based operations for both image processing and general programming. Comprehensive evaluation of state-of-the-art models exposes significant gaps in their ability to carry out long-horizon multimodal tool use. Even the best model in our evaluation, <strong>Gemini-3-Pro</strong> with tools, achieves only <strong>27.3%</strong> overall accuracy, and hard instances can require more than 25 tool-calling turns. We expect AgentVista to accelerate the development of more capable and reliable multimodal agents for realistic and ultra-challenging problem solving.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Statistics -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Benchmark at a Glance</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number">209</div>
+              <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">308</div>
+              <div class="stat-label">Total Images</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">7</div>
+              <div class="stat-label">Major Categories</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">25</div>
+              <div class="stat-label">Sub-domains</div>
+            </div>
+          </div>
+          <!-- Category Distribution -->
+          <div style="margin-top: 3rem;">
+            <h3 class="title is-4 has-text-centered" style="margin-bottom: 1.5rem;">Category Distribution</h3>
+            <img src="static/images/data_statistics.png" alt="AgentVista category distribution" class="paper-figure" style="width: 100%; max-width: 550px;">
+            <p class="figure-caption">
+              The categorization of AgentVista. The benchmark spans 7 major categories and 25 sub-domains, covering a broad range of realistic and challenging multimodal agent scenarios.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dataset Construction Pipeline -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Dataset Construction Pipeline</h2>
+          <div class="content has-text-justified">
+            <p>
+              AgentVista is built from <strong>300k+ real images</strong> through a rigorous 4-stage pipeline: (1) Agent-centric filtering reduces the pool to 568 candidates (0.19%); (2) Expert finalization produces 315 tasks; (3) Execution filtering retains 241 tasks with verified tool-use diversity; (4) Two-round verification yields the final 209 tasks. On average, constructing a single instance takes about 4 hours.
+            </p>
+          </div>
+          <img src="static/images/pipeline.png" alt="AgentVista dataset construction pipeline" class="paper-figure" style="width: 100%; margin-top: 1rem;">
+          <p class="figure-caption">
+            Overview of the AgentVista dataset construction pipeline, consisting of agent-centric filtering, expert finalization, execution filtering, and two-round verification.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Examples -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Data Examples</h2>
+          <div class="content has-text-justified">
+            <p>
+              Each query in AgentVista is grounded in complex, real-world visual scenes and is designed to elicit agentic tool use with multi-step reasoning toward a unique, verifiable answer. Examples span diverse domains including commerce, geography, entertainment, technology, society, academics, and culture.
+            </p>
+          </div>
+          <img src="static/images/data_examples.png" alt="Sampled AgentVista examples from each domain" class="paper-figure" style="width: 100%;">
+          <p class="figure-caption">
+            Sampled AgentVista examples from each domain. Each query is grounded in complex, real-world visual scenes and designed to elicit agentic tool use with multi-step reasoning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tool Environment -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Tool Environment</h2>
+          <div class="content has-text-justified" style="margin-bottom: 1rem;">
+            <p>
+              AgentVista supports a compact set of tools covering common multimodal agent workflows. Models interact with these tools over long-horizon trajectories, with the best models averaging over 12 tool-calling turns per task.
+            </p>
+          </div>
+          <div class="tool-grid">
+            <div class="tool-card">
+              <img src="static/images/text_search.png" alt="Web Search">
+              <h4>Web Search</h4>
+              <p>Retrieve web pages for facts, events, and specifications needed to solve tasks.</p>
+            </div>
+            <div class="tool-card">
+              <img src="static/images/image_search.png" alt="Image Search">
+              <h4>Image Search</h4>
+              <p>Text-to-image and reverse image search to locate visual references.</p>
+            </div>
+            <div class="tool-card">
+              <img src="static/images/visual_operation.png" alt="Page Navigation">
+              <h4>Page Navigation</h4>
+              <p>Visit and extract content from web pages for detailed information retrieval.</p>
+            </div>
+            <div class="tool-card">
+              <img src="static/images/coding.png" alt="Code Interpreter">
+              <h4>Code Interpreter</h4>
+              <p>Execute Python for image processing (crop, zoom, measure) and general computation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leaderboard -->
+  <section class="section hero is-light" id="leaderboard">
+    <div class="container is-max-widescreen">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Leaderboard</h2>
+          <div class="content has-text-justified">
+            <p>
+              Main results on the AgentVista benchmark. All values are accuracies (%). The best-performing model in each category is shown in <span class="best-score">red bold</span> and the second best is <span class="second-score">underlined</span>. Overall, Gemini-3-Pro achieves the highest accuracy among all evaluated models.
+            </p>
+          </div>
+          <div class="table-container">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="vertical-align: middle;">Model</th>
+                  <th colspan="7" style="border-bottom: 2px solid rgba(255,255,255,0.3);">By Category</th>
+                  <th colspan="2" style="border-left: 2px solid rgba(255,255,255,0.3); border-bottom: 2px solid rgba(255,255,255,0.3);">By Input Mode</th>
+                  <th colspan="2" style="border-left: 2px solid rgba(255,255,255,0.3); border-bottom: 2px solid rgba(255,255,255,0.3);">Summary</th>
+                </tr>
+                <tr>
+                  <th>Comm.</th>
+                  <th>Geog.</th>
+                  <th>Ent.</th>
+                  <th>Tech.</th>
+                  <th>Soc.</th>
+                  <th>Acad.</th>
+                  <th>Cult.</th>
+                  <th style="border-left: 2px solid rgba(255,255,255,0.3);">Single</th>
+                  <th>Multi</th>
+                  <th style="border-left: 2px solid rgba(255,255,255,0.3);">Overall</th>
+                  <th># Turns</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row">
+                  <td>Gemini-3-Pro</td>
+                  <td>16.67</td>
+                  <td class="best-score">28.21</td>
+                  <td class="best-score">20.51</td>
+                  <td>32.35</td>
+                  <td class="second-score">32.00</td>
+                  <td class="best-score">40.00</td>
+                  <td class="best-score">40.00</td>
+                  <td class="col-sep second-score">23.68</td>
+                  <td class="best-score">36.84</td>
+                  <td class="col-sep best-score">27.27</td>
+                  <td>6.67</td>
+                </tr>
+                <tr>
+                  <td>GPT-5</td>
+                  <td class="best-score">23.81</td>
+                  <td class="second-score">23.08</td>
+                  <td>12.82</td>
+                  <td class="second-score">35.29</td>
+                  <td>28.00</td>
+                  <td>26.67</td>
+                  <td class="second-score">26.67</td>
+                  <td class="col-sep best-score">24.34</td>
+                  <td>24.56</td>
+                  <td class="col-sep second-score">24.40</td>
+                  <td>12.67</td>
+                </tr>
+                <tr>
+                  <td>GPT-5.2</td>
+                  <td class="second-score">21.43</td>
+                  <td>17.95</td>
+                  <td class="best-score">20.51</td>
+                  <td class="best-score">38.24</td>
+                  <td>24.00</td>
+                  <td class="second-score">33.33</td>
+                  <td>20.00</td>
+                  <td class="col-sep">23.03</td>
+                  <td>28.07</td>
+                  <td class="col-sep second-score">24.40</td>
+                  <td>13.85</td>
+                </tr>
+                <tr>
+                  <td>GPT-5.1</td>
+                  <td class="best-score">23.81</td>
+                  <td>12.82</td>
+                  <td class="second-score">15.38</td>
+                  <td>26.47</td>
+                  <td>24.00</td>
+                  <td class="best-score">40.00</td>
+                  <td class="best-score">40.00</td>
+                  <td class="col-sep">19.74</td>
+                  <td class="second-score">31.58</td>
+                  <td class="col-sep">22.97</td>
+                  <td>17.14</td>
+                </tr>
+                <tr>
+                  <td>Gemini-3-Flash</td>
+                  <td>16.67</td>
+                  <td>17.95</td>
+                  <td>10.26</td>
+                  <td>29.41</td>
+                  <td>28.00</td>
+                  <td class="best-score">40.00</td>
+                  <td>20.00</td>
+                  <td class="col-sep">18.42</td>
+                  <td>28.07</td>
+                  <td class="col-sep">21.05</td>
+                  <td>7.78</td>
+                </tr>
+                <tr>
+                  <td>o3</td>
+                  <td class="second-score">21.43</td>
+                  <td>15.38</td>
+                  <td>7.69</td>
+                  <td>23.53</td>
+                  <td class="best-score">40.00</td>
+                  <td>26.67</td>
+                  <td>13.33</td>
+                  <td class="col-sep">17.76</td>
+                  <td>26.32</td>
+                  <td class="col-sep">20.10</td>
+                  <td>13.18</td>
+                </tr>
+                <tr>
+                  <td>Claude-Opus-4.1</td>
+                  <td>11.90</td>
+                  <td class="second-score">23.08</td>
+                  <td>10.26</td>
+                  <td>29.41</td>
+                  <td>16.00</td>
+                  <td>26.67</td>
+                  <td>13.33</td>
+                  <td class="col-sep">16.45</td>
+                  <td>22.81</td>
+                  <td class="col-sep">18.18</td>
+                  <td>7.28</td>
+                </tr>
+                <tr>
+                  <td>GPT-4.1</td>
+                  <td>16.67</td>
+                  <td>15.38</td>
+                  <td>10.26</td>
+                  <td>29.41</td>
+                  <td>20.00</td>
+                  <td>20.00</td>
+                  <td>13.33</td>
+                  <td class="col-sep">15.13</td>
+                  <td>24.56</td>
+                  <td class="col-sep">17.70</td>
+                  <td>1.74</td>
+                </tr>
+                <tr>
+                  <td>Claude-Sonnet-4.5</td>
+                  <td>11.90</td>
+                  <td class="second-score">23.08</td>
+                  <td>7.69</td>
+                  <td>26.47</td>
+                  <td>24.00</td>
+                  <td>20.00</td>
+                  <td>13.33</td>
+                  <td class="col-sep">17.11</td>
+                  <td>19.30</td>
+                  <td class="col-sep">17.70</td>
+                  <td>9.99</td>
+                </tr>
+                <tr>
+                  <td>Claude-Opus-4</td>
+                  <td>19.05</td>
+                  <td>12.82</td>
+                  <td>5.13</td>
+                  <td>26.47</td>
+                  <td>20.00</td>
+                  <td>20.00</td>
+                  <td>6.67</td>
+                  <td class="col-sep">11.84</td>
+                  <td>26.32</td>
+                  <td class="col-sep">15.79</td>
+                  <td>6.89</td>
+                </tr>
+                <tr>
+                  <td>Grok-4</td>
+                  <td>11.90</td>
+                  <td class="second-score">23.08</td>
+                  <td>7.69</td>
+                  <td>20.59</td>
+                  <td>28.00</td>
+                  <td>0.00</td>
+                  <td>0.00</td>
+                  <td class="col-sep">13.82</td>
+                  <td>17.54</td>
+                  <td class="col-sep">14.83</td>
+                  <td>16.44</td>
+                </tr>
+                <tr>
+                  <td>Claude-Sonnet-4</td>
+                  <td>9.52</td>
+                  <td>15.38</td>
+                  <td>2.56</td>
+                  <td>29.41</td>
+                  <td>16.00</td>
+                  <td>20.00</td>
+                  <td>6.67</td>
+                  <td class="col-sep">11.18</td>
+                  <td>21.05</td>
+                  <td class="col-sep">13.88</td>
+                  <td>5.37</td>
+                </tr>
+                <tr>
+                  <td>Qwen3-VL-235B</td>
+                  <td>7.14</td>
+                  <td>7.69</td>
+                  <td>7.69</td>
+                  <td>26.47</td>
+                  <td>16.00</td>
+                  <td>20.00</td>
+                  <td>13.33</td>
+                  <td class="col-sep">11.84</td>
+                  <td>15.79</td>
+                  <td class="col-sep">12.92</td>
+                  <td>2.34</td>
+                </tr>
+                <tr>
+                  <td>o4-mini</td>
+                  <td>2.38</td>
+                  <td>10.26</td>
+                  <td>2.56</td>
+                  <td>8.82</td>
+                  <td>8.00</td>
+                  <td>13.33</td>
+                  <td>0.00</td>
+                  <td class="col-sep">6.58</td>
+                  <td>5.26</td>
+                  <td class="col-sep">6.22</td>
+                  <td>1.89</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Analysis Section with Tabs -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <h2 class="title is-3">Analysis</h2>
+
+          <div class="tab-container">
+            <div class="tab-buttons">
+              <button class="tab-btn active" onclick="showTab(this, 'tool-dist')">Tool Distribution</button>
+              <button class="tab-btn" onclick="showTab(this, 'error-analysis')">Error Analysis</button>
+              <button class="tab-btn" onclick="showTab(this, 'ablation')">Tool Ablation</button>
+              <button class="tab-btn" onclick="showTab(this, 'code-ops')">Code Interpreter Ops</button>
+            </div>
+
+            <div id="tool-dist" class="tab-content active">
+              <img src="static/images/tool_distribution.png" alt="Tool distribution across models" class="paper-figure" style="width: 100%; max-width: 700px;">
+              <p class="figure-caption">
+                Tool-use distribution across models. GPT models rely more on the code interpreter, while Gemini and Claude models use web search most frequently.
+              </p>
+            </div>
+
+            <div id="error-analysis" class="tab-content">
+              <img src="static/images/error_type.png" alt="Error category distribution" class="paper-figure" style="width: 100%;">
+              <p class="figure-caption">
+                Error category distribution across four multimodal models. <em>Visual misidentification</em> is the dominant failure mode across all models, indicating that many errors originate from incorrect grounding on fine-grained visual evidence.
+              </p>
+            </div>
+
+            <div id="ablation" class="tab-content">
+              <img src="static/images/ablation.png" alt="Tool ablation study results" class="paper-figure" style="width: 100%; max-width: 700px;">
+              <p class="figure-caption">
+                Tool ablation on Gemini-3-Pro and Claude-Sonnet-4.5. Both models perform best with the full tool suite, highlighting the importance of combining visual manipulation and retrieval.
+              </p>
+            </div>
+
+            <div id="code-ops" class="tab-content">
+              <img src="static/images/codeinterpreter.png" alt="Code interpreter operation distribution" class="paper-figure" style="width: 100%;">
+              <p class="figure-caption">
+                Image manipulation operation distribution of code interpreter calls across four models. <em>Crop</em> is the most frequent operation, suggesting that many interactions rely on localized visual grounding before further reasoning.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="section">
+    <div class="container is-max-widescreen">
+      <div class="columns is-centered">
+        <div class="column">
+          <h2 class="title is-3 has-text-centered">Case Studies</h2>
+          <div class="content has-text-justified" style="margin-bottom: 2rem;">
+            <p>
+              We present representative agent trajectories from <strong>Gemini-3-Pro</strong> showing both successful and failed problem-solving. Each case includes the full task, input images, step-by-step tool calls with the model's reasoning and observations, and the final answer.
+            </p>
+          </div>
+
+          <!-- Case Study Navigation -->
+          <div class="tab-buttons" style="margin-bottom: 2rem;">
+            <button class="tab-btn active" onclick="showCase(this, 'case-sneaker')">Sneaker Auth.</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-beer')">Beer Analysis</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-jigsaw')">Jigsaw Puzzle</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-authors')">Authors United</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-arena')">Arena ID</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-pilea')">Pilea Root</button>
+            <button class="tab-btn" onclick="showCase(this, 'case-swing')">Swing Prop</button>
+          </div>
+
+          <!-- ==================== Case 1: Sneaker Authentication (SUCCESS) ==================== -->
+          <div id="case-sneaker" class="case-content active">
+            <div class="case-card case-success">
+              <div class="case-header">
+                <span class="case-badge success">Success</span>
+                <span class="case-model">Gemini-3-Pro &middot; 7 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> These are brand-name sneakers gifted to me by a friend. Acting as a senior luxury sneaker authenticator, please search for detailed craftsmanship images of the authentic product for comparison. Clearly determine whether these shoes are Real or Fake, and list at least two reasons for your judgment based on visual details.
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Images</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj1_query_1.jpg" alt="Sneaker photo 1">
+                  <img src="static/images/traj1_query_2.jpg" alt="Sneaker photo 2">
+                  <img src="static/images/traj1_query_3.jpg" alt="Sneaker photo 3">
+                  <img src="static/images/traj1_query_4.jpg" alt="Sneaker photo 4">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> Counterfeit.<br>Basis for judgment (any two answers are acceptable): 1. Widow's Peak Error &nbsp; 2. Poor Tongue Font &amp; Stitching &nbsp; 3. Misaligned 3M Stripes</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Initiating Authentication Analysis. Okay, I'm starting with a deep dive into the Dior sneaker images. My primary goal is to nail down the precise model. Once I have that, I can cross-reference with known authentication sources and guides.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Dior B30 black sneaker authentic vs fake guide'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'Dior B30 black sneaker authentic vs fake guide': 1. [How to spot fake Dior B 30 sneakers...]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Analyzing Visual Attributes. I'm now prioritizing visual comparisons. The general advice wasn't sufficient. My plan is to search and gather images of key areas: the black tongue tag, heel, insole.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'authentic Dior B30 black sneaker tongue tag', search_type: 'text'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj1_step2_1.jpg" alt="Ref 1">
+                      <img src="static/images/traj1_step2_2.jpg" alt="Ref 2">
+                      <img src="static/images/traj1_step2_3.jpg" alt="Ref 3">
+                      <img src="static/images/traj1_step2_4.jpg" alt="Ref 4">
+                      <img src="static/images/traj1_step2_5.jpg" alt="Ref 5">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Analyzing Key Details. I'm focused on the comparison images, especially the tongue tag and size tag. I've noted a white sticker in image 4 with "A8513 42." Now, I'm specifically searching if authentic pairs have this.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'authentic Dior B30 sneaker inside size tag label', search_type: 'text'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj1_step3_1.jpg" alt="Label ref 1">
+                      <img src="static/images/traj1_step3_2.jpg" alt="Label ref 2">
+                      <img src="static/images/traj1_step3_3.jpg" alt="Label ref 3">
+                      <img src="static/images/traj1_step3_4.jpg" alt="Label ref 4">
+                      <img src="static/images/traj1_step3_5.jpg" alt="Label ref 5">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 4</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Analyzing the Dior B30. I've been diving into the Poizon guides... My focus now is on authenticating Dior B30s. The size code, often stamped inside, is a key mark.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Dior B30 sneaker "A8513" sticker'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>No results found for query: 'Dior B30 sneaker "A8513" sticker'</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 5</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Analyzing Tag Characteristics. I'm now focusing on the tongue tag... I've noted the oval shape and the "DIOR" over "B30" layout. My main task right now is the font comparison.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Dior B30 authentic inner size code format'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'Dior B30 authentic inner size code format': 1. [How to Legit Check: B30 Dior Sneakers (2025) - POIZON]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 6</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Verifying Authenticity Labels. I've homed in on label verification... The Poizon guide highlights the critical role of a correct style ID (3SN279ZLZ_H860).</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({search_type: 'text', query: 'fake Dior B30 size sticker A8513'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj1_step6_1.jpg" alt="Fake ref 1">
+                      <img src="static/images/traj1_step6_2.jpg" alt="Fake ref 2">
+                      <img src="static/images/traj1_step6_3.jpg" alt="Fake ref 3">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 7</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> Analyzing Authenticity Indicators. I've been examining the search results; although no direct match for "A8513" surfaced, they highlight that genuine items boast proper labeling.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'sneaker replica code "A8513"'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'sneaker replica code "A8513"': 1. [Fashion Design and Merchandising...]...</em></div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-correct">
+                <strong>Final Answer:</strong> Analyzing the Code Structure. I've confirmed this code format isn't a known counterfeit of a famous batch, but it's also not the genuine Dior style, which uses the "3SN..." format.
+                <br><br>I am currently revisiting the heel logo... The white sticker "A8513 42" is a dead giveaway &mdash; luxury brands don't use such generic identifiers.
+                <br><br><strong>The sneakers are fake.</strong>
+                <span class="answer-mark correct-mark">&#10003; Correct</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 2: Beer Analysis (SUCCESS) ==================== -->
+          <div id="case-beer" class="case-content">
+            <div class="case-card case-success">
+              <div class="case-header">
+                <span class="case-badge success">Success</span>
+                <span class="case-model">Gemini-3-Pro &middot; 7 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> This photo shows the beer cans I collected during my recent trip to Europe. I want to find the strongest German beer in this collection for a tasting event. Among all the displayed German-brewed beers with an alcohol content exceeding 5% ABV, which specific beer brand has the highest total alcohol content per can (taking into account both the alcohol by volume percentage and the can capacity)?
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Image</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj2_query.jpg" alt="Beer cans" style="max-height: 220px;">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> Perlenbacher Strong and Steam Brew German Red (tied).</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Defining "Strongest" Beer</strong><br><br>I've clarified the user's implicit definition of "strongest". It's not about subjective taste, perceived quality, or even bitterness. It's about...<br><br>...I'm factoring in the potential for higher alcohol content in smaller cans, though these look like standard 500ml tallboys. Python will help verify labels.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>from PIL import Image
+import matplotlib.pyplot as plt
+# Display the image to have a look
+plt.imshow(original_image)
+plt.axis('off')
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj2_step1_1.jpg" alt="Zoomed beer image">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> [Calling tools: web_search]</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Perlenbacher Strong ABV\nSteam Brew German Red ABV\nSteam Brew varieties cans\nRed can Pilsener Germany shield logo\nRed and white striped beer can Germany'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'Perlenbacher Strong ABV...': 1. [Perlenbacher German pilsner, single can | Lidl US]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Beer ABV Data</strong><br><br>I've compiled some ABV data, noting Steam Brew German Red and Perlenbacher Strong both clock in at 7.9%. I'm currently looking into Steam Brew varieties to establish if the ABV numbers are accurate across different beers. My aim is to broaden the ABV numbers, for greater analysis.<br><br><strong>Pinpointing Steam Brew Can</strong><br><br>I've determined the gold/bronze Steam Brew can on the right features a steampunk character, with goggles. It seems I may have been mistaken in assuming this could be the <strong>Imperial IPA</strong> with the goggles and character. I'm focusing on those specific visual cues now to narrow it down, along with the ABV numbers. I still need to identify the other cans, and I'll keep checking the images, with that in mind.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code># Crop and save images... (Code omitted for brevity)
+# ...
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj2_step3_1.jpg" alt="Can 1">
+                      <img src="static/images/traj2_step3_2.jpg" alt="Can 2">
+                      <img src="static/images/traj2_step3_3.jpg" alt="Can 3">
+                      <img src="static/images/traj2_step3_4.jpg" alt="Can 4">
+                      <img src="static/images/traj2_step3_5.jpg" alt="Can 5">
+                      <img src="static/images/traj2_step3_6.jpg" alt="Can 6">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 4</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Considering Crop Impact</strong><br><br>I'm now focusing on how crops are beneficial. I've got an idea brewing, centered on a "Steam Brew Summer Ale," featuring a character (maybe a monkey?) with goggles. I'm searching for information regarding the "Steam Brew Summer Ale ABV". It looks promising so far.<br><br><strong>Exploring Beer Logos</strong><br><br>I'm now diving into visual cues. I've got a "Red Pilsener" with a crown logo to explore further, possibly branded "Felsgold" or something similar. Then there's a striped can &mdash; "Karlskrone" maybe? &mdash; which could be a Radler mix. I've also confirmed that "Perlenbacher Strong" is 7.9% ABV, which is important to remember. I'm moving on to other brands as well.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Steam Brew Summer Ale ABV\nRed can Pilsener crown anchor logo Germany\nRed and white diagonal striped beer can Germany\nKarlskrone striped can\nAdelskronen Pilsener red can\nPerlenbacher Strong ABV'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'Steam Brew Summer Ale ABV...': 1. [Home | Steam-Brew | German Craft Beer Resistance]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 5</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Pinpointing ABV &amp; Styles</strong><br><br>I'm currently sorting through search results. While I have the ABV for a Steam Brew Imperial Stout (7.5%), the Summer Ale remains elusive. I'm also now shifting focus to identify the Red Pilsener...<br><br>After some searching, I'm leaning toward <strong>K&ouml;nigsbacher</strong>. For the striped can, I'm considering <strong>Karlskrone</strong> or <strong>Perlenbacher</strong> Radler, which are common Aldi and Lidl brands respectively, or a "Mixery" style. If Radler, it's around 2.5%; if "Mixery" more like 2.5&ndash;5%. I'm trying to identify the highest ABV brews in the lineup.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Steam Brew Summer Ale ABV\n"Steam Brew" Summer Ale alcohol content\n"Red can" Pilsener crown anchor logo\nbrand of red beer can with crown and anchor logo\n"5,0 Original" highest ABV beer'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>No results found for query...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 6</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Refining The Search</strong><br><br>I'm initially getting no results, so I'm simplifying the search terms. I'm focusing on "Steam Brew Summer Ale" and "Red beer can crown anchor logo" separately now. Furthermore, I've noticed a partial text detail on the red can, potentially ending in "rg".</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({search_type: 'reverse', image_url: 'new_output/...'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj2_step3_5.jpg" alt="Red can crop">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 7</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Refining Search Queries</strong><br><br>I'm hitting a wall with reverse image search...<br><br><strong>Verifying Volume Details</strong><br><br>I'm now certain that Steam Brew generally comes in 500ml cans, which is typical for German beers, although there could be exceptions. I'm also confirming that both Steam Brew and Perlenbacher are Lidl brands, often brewed by Eichbaum. My focus shifts to verifying the ABV of "Steam Brew German Red," and to ensure that Perlenbacher Strong is also the 7.9% I expect.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Steam Brew German Red ABV exact\nSteam Brew Summer Ale ABV\nPerlenbacher Strong ABV\nIs Steam Brew German Red 7.9%?\n"Steam Brew" varieties list ABV'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'Steam Brew German Red ABV exact...': 1. [Steam Brew German Red | Privatbrauerei Eichbaum]...</em></div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-correct">
+                <strong>Final Answer:</strong> <strong>Calculating Alcohol Content</strong><br><br>I've determined that both <strong>Steam Brew German Red and Perlenbacher Strong</strong> contain 39.5 ml of alcohol each, as 7.9% of a 500ml can. Now, I'm checking for any additional contenders...<br><br>I'm now certain, after reviewing many different options, that the answer remains <strong>Steam Brew German Red and Perlenbacher Strong</strong>, both at 7.9% ABV. I've re-examined the can sizes and confirmed they are both the standard 500ml.
+                <span class="answer-mark correct-mark">&#10003; Correct</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 3: Jigsaw Puzzle (FAILURE) ==================== -->
+          <div id="case-jigsaw" class="case-content">
+            <div class="case-card case-failure">
+              <div class="case-header">
+                <span class="case-badge failure">Tool Execution Failure</span>
+                <span class="case-model">Gemini-3-Pro &middot; 3 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> The first image is a 6&times;6 jigsaw puzzle made from a photo of karst landforms, with one piece removed. The second image is a local reference landscape photo. Your task is to reconstruct the puzzle and then tell me the position of the missing piece in the original image. You may establish coordinate systems for both the original image and the input image. The piece in the top-left corner is (1, 1), the top-right corner is (1, 6), and the bottom-right corner (the corresponding position in the image to be reconstructed is empty) has the coordinates (6, 6).
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Images</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj3_query_1.jpg" alt="Jigsaw puzzle">
+                  <img src="static/images/traj3_query_2.jpg" alt="Reference landscape">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> (3, 1)</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Considering the Jigsaw Puzzle</strong><br><br>I'm currently focused on analyzing the jigsaw puzzle problem. My primary task involves thoroughly examining the provided image, which consists of 35 puzzle pieces arranged in a grid-like configuration with the user noting the puzzle is 6x6 with one missing piece. I am working on how to efficiently approach the computational challenges to create an accurate solution.<br><br><strong>Verifying the Grid Layout</strong><br><br>I've confirmed the image's layout...<br><br><strong>Comparing Reference Images</strong><br><br>I'm now comparing the provided puzzle pieces against the "local reference" image. I've identified terrain and hot air balloons as key features. I'm focusing...<br><br><strong>Planning the Reconstruction</strong><br><br>I'm now outlining the puzzle reconstruction plan. I can use Python to analyze piece borders and match them. I'm considering both automated matching of image features (contours, textures) and a more visual approach. A Python script could extract pieces, analyze edge types and shapes, and attempt matching. The images are distinct, and extraction should be easy, but I will need to consider how to create a good matching algorithm. I will also use visual features like balloons or specific shapes to aid.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Load the image
+img = original_image
+img_np = np.array(img)
+# Convert to grayscale
+gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+# Threshold to get the pieces
+# The background is white (255), pieces are darker.
+ret, thresh = cv2.threshold(gray, 250, 255, cv2.THRESH_BINARY_INV)
+# Find contours
+contours, hierarchy = cv2.findContours(thresh,
+cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# Filter small contours (noise)
+min_area = 1000
+pieces = [c for c in contours if cv2.contourArea(c) > min_area]
+# Sort pieces by position
+#...
+plt.axis('off')
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj3_step1_1.jpg" alt="Segmentation 1" style="max-height: 280px;">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Segmentation Issues</strong><br><br>I'm currently stuck on the segmentation. My algorithm is consistently under-segmenting the input, finding only 24 pieces when there should be 35. I've pinpointed that the proximity of pieces, particularly in vertical or horizontal alignments, is causing the mis-segmentation. I'm exploring methods to address this, such as adaptive thresholding or region growing to tease apart these touching objects.<br><br><strong>Shifting to Manual Approach</strong><br><br>I've abandoned the automated segmentation for now due to persistent merging issues. I'm focusing on a visual, grid-based approach. The source image is structured in rows, each containing 6 pieces except the last row which has 5. I will now analyze the pieces row by row, identifying piece types and mapping them to their positions in the 6x6 puzzle grid, as I determine each one's (Puzzle Row, Puzzle Column) coordinate. It seems there is one piece missing.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Load image
+img = original_image
+img_np = np.array(img)
+gray = cv2.cvtColor(img_np, cv2.COLOR_RGB2GRAY)
+# Threshold: Background is white (255).
+# Use a high threshold to catch all non-white pixels.
+ret, thresh = cv2.threshold(gray, 250, 255, cv2.THRESH_BINARY_INV)
+# Morphological opening to remove noise and separate slightly touching pieces
+kernel = np.ones((3,3), np.uint8)
+thresh_open = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+# Find contours
+contours, _ = cv2.findContours(thresh_open, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# Filter by area
+pieces = []
+for c in contours:
+    if cv2.contourArea(c) > 5000: # Adjust area threshold based on image size
+        pieces.append(c)
+#...
+plt.axis('off')
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong> Still only extracts <strong>24 regions</strong> instead of 35 pieces.</div>
+                    <div class="step-images">
+                      <img src="static/images/traj3_step2_1.jpg" alt="Segmentation 2" style="max-height: 280px;">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Extracting and Displaying Pieces</strong><br><br>I'm starting the process to extract each puzzle piece and display them using Python. I will then analyze each extracted image. Also, I am planning to analyze the edges of each image to classify them. I'm hoping to use this data to determine the grid structure.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# ...
+# We have 35 pieces. Let's display them in a 6x6 grid format (last one empty)
+# But we only found 24 pieces in the previous step. Let's proceed with what we have.
+# Actually, I need to fix the segmentation first,
+#but since I am shifting to manual analysis,
+# I will just display the pieces found to confirm visual features.
+# Let's display the pieces we found in a grid.
+#...
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong> Visualization confirms missing segments; reconstruction cannot proceed.</div>
+                    <div class="step-images">
+                      <img src="static/images/traj3_step3_1.jpg" alt="Extracted pieces">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-wrong">
+                <strong>Final Answer:</strong> The model failed to correctly segment the puzzle pieces and perform the reconstruction. It identified only 24 pieces instead of the expected 35 (or 36 slots).
+                <br><br>Due to the failure in the <code>code_interpreter</code> segmentation step, the model could not proceed to correctly identify the missing piece's coordinate.
+                <span class="answer-mark wrong-mark">&#10007; Failed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 4: Authors United (FAILURE) ==================== -->
+          <div id="case-authors" class="case-content">
+            <div class="case-card case-failure">
+              <div class="case-header">
+                <span class="case-badge failure">Visual Misidentification</span>
+                <span class="case-model">Gemini-3-Pro &middot; 13 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> This photo shows the window display of a bookstore that supports the "Authors United". The display features photos of several authors who have appeared at this bookstore. Among all the authors whose photos are clearly visible in this window display, which one has had their works stay on The New York Times Bestseller List for the most total weeks during the years when the "Authors United" movement was most active? And how many weeks was that? What is the corresponding work?
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Image</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj4_query.jpg" alt="Bookstore window" style="max-height: 220px;">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> Donna Tartt, <em>The Goldfinch</em>, 39 weeks.</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying the Author</strong><br><br>Okay, I'm working on pinpointing that author. I know the bookstore window showcases authors from "Authors United." It seems photos are used. I need to gather info and compare the window display photos to the authors listed.<br><br><strong>Analyzing the Bookstore</strong><br><br>I've got the bookstore identification underway. The signs are key...<br><br><strong>Pinpointing the Task's Core</strong><br><br>I've homed in on the task's core: identifying the author, their work, and the total weeks it remained. It seems the query is centered on a single work with the most weeks. The bookstore's sign, "Words bookstore Maplewood Authors United," helps with narrowing down authors. I've noted author photos, including book covers. Now, I need to match the photos to the author data.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: '"words" bookstore Maplewood Authors United window display'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for '"words" bookstore Maplewood Authors United window display': 1. [Words Display Supports 'Authors United' - The Village Green]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">visit</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Pinpointing Key Details</strong><br><br>I've confirmed the bookstore is "[words] Bookstore" in Maplewood, NJ. My next step is to examine the article, "[Words Display Supports 'Authors United' - The Village Green]". I suspect it contains crucial information, perhaps a list of authors or helpful photos. The "Authors United" movement, active circa 2014, is also relevant, considering the timing of the bookstore activity.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>visit({goal: 'Identify the authors featured in the window display of [words] Bookstore supporting Authors United.', url: 'https://villagegreennj.com/business/words-display-supports-authors-united/'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>The useful information in https://villagegreennj.com... for user goal... as follows: <strong>Evidence in page:</strong> Now, the Words window display is supporting Authors United...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying Key Authors</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>import easyocr
+result = reader.readtext(np.array(original_image))</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>stdout: Text: Words], Prob: 0.35... Text: stands with, Prob: 0.98...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 4</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Seeking Author Identification</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>from PIL import Image
+# Define crop regions based on visual estimation...</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong> Produces 10 crops of individual author photos/book covers from the window display.</div>
+                    <div class="step-images">
+                      <img src="static/images/traj4_step4_1.jpg" alt="Crop 1">
+                      <img src="static/images/traj4_step4_2.jpg" alt="Crop 2">
+                      <img src="static/images/traj4_step4_3.jpg" alt="Crop 3">
+                      <img src="static/images/traj4_step4_4.jpg" alt="Crop 4">
+                      <img src="static/images/traj4_step4_5.jpg" alt="Crop 5">
+                      <img src="static/images/traj4_step4_6.jpg" alt="Crop 6">
+                      <img src="static/images/traj4_step4_7.jpg" alt="Crop 7">
+                      <img src="static/images/traj4_step4_8.jpg" alt="Crop 8">
+                      <img src="static/images/traj4_step4_9.jpg" alt="Crop 9">
+                      <img src="static/images/traj4_step4_10.jpg" alt="Crop 10">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 5</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> [Calling tools: image_search]</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'man with Read shirt author photo', search_type: 'reverse', image_url: '.../tool_image_2.jpg'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Image: N/A, Text: No title...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 6</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Refining The Search</strong><br><br>I'm now focusing on the text within the image, specifically the word "Read" on the shirt. My previous attempt, reversing the image, didn't yield much, likely due to image quality. I'm hypothesizing that this shirt is a common design, potentially related to the American Library Association. I'm moving toward text-based search terms.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Words Bookstore Maplewood Authors United window display authors list'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [[words] Bookstore]... 2. [Image of the Day...]</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 7</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying Author Appearances</strong> ...<br><br>I must pinpoint the winner from the photo.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: '"Anthony Doerr" "Words Bookstore" Maplewood'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [Publishers Weekly...]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 8 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 8</div>
+                  <div class="step-content">
+                    <span class="step-tool">visit</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Connecting the Dots</strong><br><br>I've made some progress linking Anthony Doerr to Words Bookstore, and it appears he's a bestselling author. I also have the publication date of "All the Light We Cannot See" as May 2014, and have linked that date to Authors United. I am now looking to determine if there is any significance to this timeline...<br>I'm also searching on Daniel Wallace and David Foster Wallace.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>visit({goal: 'Get the list of authors...', url: 'https://www.shelf-awareness.com/theshelf/2014-10-06...'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>The useful information... The newest front window display at [words] Bookstore...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 9 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 9</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identify the Crops</strong><br><br>I'm currently trying to identify the crops...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'author Read poster', image_url: '.../tool_image_10.jpg', search_type: 'reverse'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj4_step4_10.jpg" alt="Crop 10 reused">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 10 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 10</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying Potential Authors</strong><br><br>I hit a dead end with the reverse search. Now, I'm switching gears. My current approach involves...<br><br>Now, I'm checking into Donna Tartt. I now see she is published by Hachette, which makes her a compelling candidate.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'author Read poster list'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [ALA Read Posters]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 11 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 11</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Considering Potential Reads</strong> ...<br><br><strong>Confirming Bestseller Data</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Did Donna Tartt appear at Words Bookstore Maplewood?'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [Events - Words Bookstore]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 12 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 12</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Book Persistence</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'Authors United members who appeared at Words Bookstore Maplewood list'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [Words Display Supports 'Authors United'...]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 13 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 13</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> ...I've synthesized all the information. The bookstore is Words. The display is for Authors United. The authors featured include Anthony Doerr. His book <em>All the Light We Cannot See</em> was a massive bestseller during the relevant period (2014&ndash;2015) and stayed on the list for a very long time (80+ weeks). This fits the "most total weeks" criteria better than others like Tartt (approx 39 weeks). I'm confident in identifying Anthony Doerr.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'How many weeks was All the Light We Cannot See on NYT bestseller list 2014 2015?'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results... 1. [All the Light We Cannot See - Wikipedia]... Spent more than 200 weeks on the list...</em></div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-wrong">
+                <strong>Final Answer:</strong> Verifying Poster Author. I'm now back to the "Read" poster, and I've looked at whether it is <strong>Paul Auster</strong> or <strong>Khaled Hosseini</strong>.
+                <br><br>Considering that neither had an especially long-running bestseller that coincided with the timeframe, I'm sticking with my conclusion that <strong>Anthony Doerr</strong>, is the most relevant author, with <strong>All the Light We Cannot See</strong> the work, and the length of the run being approximately <strong>84 weeks</strong>.
+                <br><br>I have confirmed the data, I am confident in my response.
+                <span class="answer-mark wrong-mark">&#10007; Failed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 5: Arena Identification (FAILURE) ==================== -->
+          <div id="case-arena" class="case-content">
+            <div class="case-card case-failure">
+              <div class="case-header">
+                <span class="case-badge failure">Visual Misidentification</span>
+                <span class="case-model">Gemini-3-Pro &middot; 11 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> My colleague just sent back this photo from a site visit but forgot to label the location in the report, referring to it only as 'Target Arena A.' To link the venue data such as seating capacity and fan distribution to the correct team in my database, I need to identify exactly which university is shown in this image.
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Image</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj5_query.jpg" alt="Arena photo" style="max-height: 220px;">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> UNC</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying University Details</strong><br><br>I'm focusing on identifying the university in the image, and am starting by examining key details. The open truss ceiling is a good starting point, and I'm trying to mentally catalog similar gymnasiums. The metallic color and general structure of the trusses are also good clues. I'll need to remember these aspects of the ceiling structure.<br><br><strong>Analyzing Visual Components</strong><br><br>I've zeroed in on the visual components, and now I'm making sure that I have all the key details. The digital scoreboard, basketball court markings, and the distinct logo on the floor are key. Cream walls, windows, grey curtains, and people playing basketball provide context. I'll focus on cropping the logo and using it for a reverse image search to figure out where I am.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>from PIL import Image
+import matplotlib.pyplot as plt
+# Load the original image
+img = original_image
+# Display the image to find coordinates for the logo
+plt.imshow(img)
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj5_step1_1.jpg" alt="Full arena view">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> [Calling tools: code_interpreter]</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code># Crop the logo
+logo_crop = img.crop((0, 950, 150, 1100))
+# Crop the scoreboard
+scoreboard_crop = img.crop((400, 400, 550, 550))
+# Display crops
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(logo_crop)
+# ...</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj5_step2_1.jpg" alt="Logo crop">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing the Image Elements</strong><br><br>I've got a grasp of the visual elements. The logo crop, though imperfect, suggests an animal motif &mdash; possibly a paw or head, monochromatic. I'm focusing on the scoreboard, I botched the first crop. The rough coordinates are now pinpointed at approximately x=430, y=450.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({image_url: 'new_output/...original_image.jpg', search_type: 'reverse'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>No matches found for reverse image search of: new_output/api_google_gemini-3-pro-preview_mmagent_bmk_v6_new/mmagent_21/original_image.jpg</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 4</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing the Unidentified Logo</strong><br><br>Okay, so the reverse image search yielded nothing, which is interesting. It could be original or simply not indexed. I'm focusing on the logo now, and I'll re-crop it with more context if possible. The existing crop shows a paw or animal part, and that's the starting point.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code># Re-crop the logo with slightly better coordinates if possible,
+# or just the same area but save it to search
+logo_crop_2 = img.crop((0, 950, 180, 1100))
+plt.imshow(logo_crop_2)
+plt.show()</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj5_step4_1.jpg" alt="Re-cropped logo">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 5</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> [Calling tools: image_search]</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({search_type: 'reverse', image_url: 'new_output/.../tool_image_3.jpg'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>No matches found for reverse image search of: new_output/api_google_gemini-3-pro-preview_mmagent_bmk_v6_new/mmagent_21/tool_image_3.jpg</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 6</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Refining Logo Search</strong><br><br>I've hit a roadblock with the initial logo crop attempt; it seems the image is either too small or the logo's distorted. I'm pivoting to a descriptive approach. I'm focusing on "Bulldog logo basketball court," "Husky logo," or even "Wolf logo," all of which seem possible. The snout feature is a key element I'm considering. Now I'm focusing on the people in the image.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'university basketball gym with elevated running track and exposed truss ceiling'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'university basketball gym with elevated running track and exposed truss ceiling': 1. [The 25 Most Incredible College Basketball Arenas]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 7</div>
+                  <div class="step-content">
+                    <span class="step-tool">code_interpreter</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying the Venue</strong><br><br>Okay, I've eliminated "The Barn" at U of Minnesota; that's clearly an arena, not a rec center like this. "Case Gym" at BU seems promising, based on the description, and "Lehman APEX" is another possibility. I'm going to re-examine the logo; it seems to be part of the floor design.<br><br><strong>Refining the Search</strong><br><br>I'm now focusing on identifying the animal depicted in the logo, leaning towards a Bulldog or Husky. I've re-cropped and rotated the image, and I'm searching using terms like "basketball court logo animal head profile grey." I'm also looking for similar ceiling types and banners, and I am exploring potential universities that fit the description, such as Butler, UConn, Northeastern, Yale, Gonzaga, and others.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>code_interpreter</code> called with:
+<pre><code>from PIL import ImageEnhance
+
+# Enhance the logo crop
+enhancer = ImageEnhance.Contrast(logo_crop_2)
+logo_enhanced = enhancer.enhance(2.0)
+enhancer = ImageEnhance.Sharpness(logo_enhanced)
+# ...</code></pre></div>
+                    <div class="step-obs"><strong>Observation:</strong></div>
+                    <div class="step-images">
+                      <img src="static/images/traj5_step7_1.jpg" alt="Enhanced logo">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 8 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 8</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Identifying the Logo's Form</strong><br><br>I've homed in on the logo's animal form &mdash; definitely an animal head. My mind is bouncing between Bulldog, Wolf, or Husky. I'm also seeing Black, White, and possibly Grey or Blue as the palette, though lighting makes it tricky. The shape appears elongated. I'm getting vibes of Bryant University's or Wofford Terriers' logos.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({image_url: 'new_output/.../tool_image_4.jpg', search_type: 'reverse'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>No matches found for reverse image search of: new_output/api_google_gemini-3-pro-preview_mmagent_bmk_v6_new/mmagent_21/tool_image_4.jpg</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 9 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 9</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Searching for Locations</strong> ...<br><br><strong>Identifying Potential Arenas</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'University of St. Thomas Anderson Athletic and Recreation Complex basketball court', search_type: 'text'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Image: [URL] Text: Anderson Athletics and Recreation Complex (AARC) | University of ..., Webpage Url: [URL]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 10 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 10</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Comparing Visual Details</strong><br><br>I've made a key discovery! The St. Thomas AARC images showcase a remarkably similar ceiling structure. I'm focusing on "aarc-basketball-court-with-player.jpg" particularly. We've got the white trusses, the silver ducts, and the windows. The track/balcony also appears to be comparable. I'm now examining the next visual.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'University of St. Thomas Schoenecker Arena interior', search_type: 'text'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Image: [URL] Text: Facilities Schoenecker Arena - The University of St. Thomas, Webpage Url: [URL]...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 11 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 11</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Confirming Venue Identity</strong><br><br>I've got it! The images definitively place us at Schoenecker Arena, specifically the AARC, based on the ceiling architecture. The logo on the floor is clearly the St. Thomas Tommie head, a grey/purple cat-like logo. It's now clear where we are. I am reviewing the images.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({search_type: 'text', query: 'University of St. Thomas AARC field house basketball courts'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Image: [URL] Text: Anderson Athletics and Recreation Complex (AARC) | University of ..., Webpage Url: [URL]...</em></div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-wrong">
+                <strong>Final Answer:</strong> ...I'm now certain the university is St. Thomas, specifically in Minnesota.
+                <br><br>I've ruled out the Houston campus by verifying their Celt logo and contrasting the facility...
+                <span class="answer-mark wrong-mark">&#10007; Failed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 6: Pilea Root Diagnosis (FAILURE) ==================== -->
+          <div id="case-pilea" class="case-content">
+            <div class="case-card case-failure">
+              <div class="case-header">
+                <span class="case-badge failure">Knowledge Hallucination</span>
+                <span class="case-model">Gemini-3-Pro &middot; 6 tool calls</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> I was repotting my Pilea and was shocked to find this large white mass at the base of the roots. I poked it with tweezers and found it is not soft or squishy at all. It did not burst; instead, it feels quite hard and crusty like a dried-up scab. For context, I accidentally overwatered this plant severely about two months ago. It lost several leaves but eventually stabilized. Based on the image and this history, what exactly is this substance and do I need to apply any pesticides?
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Images</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj6_query_1.jpg" alt="Pilea root 1">
+                  <img src="static/images/traj6_query_2.jpg" alt="Pilea root 2">
+                  <img src="static/images/traj6_query_3.jpg" alt="Pilea root 3">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> No pesticide needed. This is calloused or crustified root rot residue from the previous overwatering incident.</div>
+              <div class="case-trajectory">
+                <p class="case-label">Tool Trajectory</p>
+
+                <!-- Step 1 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Investigating Plant Root Mass</strong><br><br>I'm currently focused on this intriguing white, hard mass discovered during the Pilea's repotting. My primary goal is to identify what this could be. I am considering several possibilities, the most likely of which relates to the potential for mineral build-up. I'm taking the texture, color, and location of the mass into account.<br><br><strong>Analyzing the Texture</strong><br><br>The substance is hard and crusty, not soft or squishy; it didn't break apart when poked, rather, it seems to be like a dried-up scab. My Pilea was severely overwatered two months ago. I'm wondering what this substance is and if I need pesticides.<br><br><strong>Considering the Photos</strong><br><br>I am now focusing on the first two images. My current hypothesis centers on the "large white mass" observed at the base of the Pilea's roots...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'pilea peperomioides white hard mass at base of roots'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results for 'pilea peperomioides white hard mass at base of roots': 1. White spots on the bottom of a Pilea peperomioides... are mineral deposits... 2. Those are just mineral deposits from watering... 3. White grains on a Chinese Money Plant's leaves... 9. The white spots are pores! Also known as stomata...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 2</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Root Mass</strong><br><br>I've been reviewing the search results, which seem more focused on leaf issues. The user's description of a large white mass at the root base is quite different. Re-examining the images, I'm noticing a clump where the roots meet the main stem. Considering the user's history, I need to focus on this unusual mass.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'white hard lump on roots houseplant repotting'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results: 1. The general consensus is that it doesn't harm the plant... 3. White fuzzy balls... most likely harmless... 5. Salt and mineral build-up is the most likely culprit... 6. The white stuff on the roots looks to be some sort of mold/fungus...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 3</div>
+                  <div class="step-content">
+                    <span class="step-tool">image_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing the Evidence</strong><br><br>My initial assessment leans towards mineral buildup, given the description of a hard, crusty white mass akin to a dried scab. The provided details, especially the hardness, are less consistent with mold or root rot.<br><br><strong>Pinpointing the Culprit</strong> ...</div>
+                    <div class="step-action"><strong>Action:</strong> <code>image_search({query: 'pilea peperomioides roots nursery plug'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Images found: 'FlowerPotNursery Chinese Money Plant... Plug 5 Plants', 'Pilea peperomioides plugs have arrived', showing cylindrical plugs.</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 4</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Pilea Plugs</strong><br><br>I'm currently focused on Pilea plugs, which appear as small cylinders. I've noted the potential presence of a white mesh or paper. I'm also considering the implications of overwatering: it may lead to root rot or soil erosion, exposing the plug.<br><br><strong>Exploring the Morphology</strong><br><br>I'm now focusing on the morphology of this white mass. The "hard and crusty" description is key. Now I'm leaning toward a callus or cork tissue resulting from stem rot. Given the Pilea's tendency to wood at the base, this seems more likely. Also, could it be a dried-up slime mold? <em>Fuligo septica</em> is a possibility.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'dried slime mold on potting soil white hard crust'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results: 1. White and yellow stuff... combination of fungal growth and slime mould... 5. Slime molds... leave a dry crusty residue on its host... 8. This is slime mold... likes to grow on fresh organic material.</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 5</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Underground Residue</strong><br><br>I've been reviewing search results, which confirm slime mold can leave a dry residue. However, the image presents a contradiction: this residue is underground near roots...<br><br>I'm now quite certain this is the remains of a nursery plug, likely peat-based. The location directly under the stem is exactly where it would be. The "white" color could be the mesh or mineral deposits.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'hard white mass at base of pilea roots repotting'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results: 1. White slime mold... 2. It's fungal... 12. What is this hard 'ball' in my Pilea? It has an outer skin... It looks like a root mesh.</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 6</div>
+                  <div class="step-content">
+                    <span class="step-tool">web_search</span>
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing Root Features</strong><br><br>My initial search didn't confirm the "hard white mass" as a typical Pilea feature like a tuber. This suggests it's likely something external or a healed pathological condition. Considering the overwatering history, I'm now leaning toward the first possibility: A fungal saprophyte.<br><br><strong>Prioritizing Likely Scenarios</strong><br><br>I've refined the possibilities. The "dried saprophytic fungus/mold" and "dried nursery plug" explanations are now the leading contenders. These align with the observed hardness and crustiness. The image review favored the rounded shape fitting the fungal growth and the plug over callus.</div>
+                    <div class="step-action"><strong>Action:</strong> <code>web_search({query: 'pilea nursery plug mesh white roots'})</code></div>
+                    <div class="step-obs"><strong>Observation:</strong> <em>Search results: 1. What is this hard 'ball' in my Pilea?... It looks like a root mesh... 2. Why You Need To Check Your Houseplants For Root Mesh... 3. Understanding Death Plugs... wrapped in mesh...</em></div>
+                  </div>
+                </div>
+
+                <!-- Step 7 (reasoning only, no tool call) -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 7</div>
+                  <div class="step-content">
+                    <div class="step-thought"><strong>Thought:</strong> <strong>Analyzing User Findings</strong><br><br>I'm now focusing on how the user describes their "large white mass," specifically noting the "hard ball" and "outer skin" features. The description of "root mesh... used by commercial growers" aligns well.<br><br><strong>Identifying the "Mass"</strong><br><br>I now believe the "mass" is likely a nursery plug, sometimes called a "death plug"...<br><br>I'm now zeroing in on a dried fungal mass, or callus. The "fibrous cylinder" and "scab" descriptions, along with the mushroom image, solidify this. I'm leaning toward a dried saprophytic fungal mass or a nursery plug, but I'll make sure to mention mineral buildup as an outside possibility.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-wrong">
+                <strong>Final Answer:</strong> The large, hard, white mass at the base of your Pilea roots is most likely the remains of a <strong>nursery plug</strong> (often called a "growth plug" or sometimes a "death plug") that has become encrusted or colonized by a <strong>dried saprophytic fungus</strong>.<br><br><strong>Reasoning:</strong>
+                <ul style="margin-top: 0.5em;">
+                  <li><strong>Nursery Plug:</strong> The location directly at the base of the stem is characteristic of where growers use peat or fabric-wrapped plugs to start seedlings. The "hard ball" with an "outer skin" (as found in similar cases) corresponds to the mesh casing or the hardened peat core.</li>
+                  <li><strong>Fungal Colonization:</strong> The "scab-like" texture and the history of severe overwatering suggest that the organic material in the plug became waterlogged, promoting fungal growth (saprophytes) which then dried out and hardened when the plant stabilized.</li>
+                </ul>
+                <strong>Recommendation:</strong> No pesticides are needed. You can gently try to peel away the mesh/hard mass if it comes off easily to free the roots, but it is not a pest infestation.
+                <span class="answer-mark wrong-mark">&#10007; Failed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== Case 7: Swing Prop Construction (FAILURE) ==================== -->
+          <div id="case-swing" class="case-content">
+            <div class="case-card case-failure">
+              <div class="case-header">
+                <span class="case-badge failure">Instruction Misinterpretation</span>
+                <span class="case-model">Gemini-3-Pro &middot; Direct Response</span>
+              </div>
+              <div class="case-task">
+                <strong>Task:</strong> I am building a swing prop for my children's photography studio but I need it to be completely stationary for safety reasons. The goal is to create a structure that looks like a traditional swing in photos while remaining a 100% rigid and immovable seat that will not sway or shift when kids climb on it. I want to avoid any 'magically floating' look for the seat so it must appear connected to the top beam, but I only have basic woodworking tools and cannot do complex joinery. How can I achieve a rock-solid support system that still maintains the visual illusion of being hung by ropes?
+              </div>
+              <div class="case-images">
+                <p class="case-label">Input Image</p>
+                <div class="case-img-row">
+                  <img src="static/images/traj7_query.jpg" alt="Swing reference" style="max-height: 200px;">
+                </div>
+              </div>
+              <div class="case-gt"><strong>Ground Truth:</strong> Bolt the seat to the frame using vertical wooden posts and wrap thick hemp rope around the posts to hide the wood and create the hanging illusion.</div>
+              <div class="case-trajectory">
+                <p class="case-label">Model Reasoning (Single Turn &mdash; No Tool Calls)</p>
+
+                <!-- Analysis Section -->
+                <div class="traj-step">
+                  <div class="step-badge">Step 1</div>
+                  <div class="step-content">
+                    <div class="step-thought"><strong>Defining the Challenge</strong><br><br>I'm focusing intently on the core requirements: a swing prop for a photography studio. The immediate challenge is ensuring absolute immobility &mdash; it <em>must</em> be stationary, rigid, and safe, as a swing that moves is a photoshoot killer! I'm thinking about the implications of this stationary requirement, as it will impact the design considerations.<br><br><strong>Analyzing the Structure</strong><br><br>Now, I'm analyzing the provided image further. It presents a rigid structure, not a rope-hung swing as initially assumed. I see a critical horizontal wooden stretcher that joins the A-frame legs, and a seat that directly rests upon it. The seat back appears to lean against the frame. This changes my approach &mdash; I'll focus on a stable, supported design using simple tools.<br><br><strong>Revising Support Structures</strong><br><br>I'm now revising the support structures. Upon closer examination of the image, the side view reveals that the seat is likely supported by a horizontal bar that passes through or is attached to the A-frame legs, and not suspended from the top beam. This creates the "swing" illusion. I'm brainstorming solutions like embedding metal rods inside rope for a realistic look, but it might be overly complex, so I'm considering the more straightforward "hidden" support approach.<br><br><strong>Exploring Visual Deception</strong><br><br>I'm now exploring deceptive visual elements. Fake ropes attached to the top beam offer stability with easy woodwork, but the cross-brace's visibility is a concern. We can mitigate this with strategic angles or camouflage paint. Rigid wooden "ropes" are a simple alternative but risk looking unnatural. Another idea is triangulation from the back to provide a "ghost" support, which presents an invisibility challenge from all angles.<br><br><strong>Constructing the Illusion</strong><br><br>I'm now integrating rope aesthetics with bench stability. I plan to build a sturdy A-frame with a horizontal stretcher bar to anchor the seat, essentially creating a bench. The swing illusion will be achieved by drilling holes and running non-load-bearing rope between the seat and top beam. I'll use bolts or carriage bolts for the A-frame pivots and simple screws for the stretcher bars. I'm focusing on simplicity and basic tools.<br><br><strong>Finalizing the Build</strong><br><br>I'm now solidifying the construction details. I'll build an L-shaped seat, placing it atop the crossbars and securing it firmly with screws. This transforms it into a stationary bench. To achieve the swing illusion, I'll attach decorative ropes to the top beam and seat, pulling them taut for the desired aesthetic. I've ensured it meets all constraints: stationary, visually swing-like, requiring basic tools, and grounded for a stable look. My analysis includes the image, specifically the joint between the horizontal bar and A-frame. I'm seeing this as a lap joint or through joint.<br><br><strong>Simplifying Connections</strong><br><br>I'm now simplifying the joint between the stretcher bar and the A-frame legs. Instead of a complex pass-through, I will just screw the horizontal bar to the <em>inside</em> or <em>outside</em> of the legs. This will significantly ease construction while retaining the required stability.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="case-answer case-wrong">
+                <strong>Final Answer:</strong> The recommended solution is to build a <strong>stationary bench structure disguised as a swing</strong>.
+                <ol style="margin-top: 0.5em;">
+                  <li><strong>A-Frame Base:</strong> Construct a standard rigid A-frame using basic lumber.</li>
+                  <li><strong>Horizontal Support (The Trick):</strong> Instead of hanging the seat, screw a sturdy horizontal wooden stretcher bar across the A-frame legs.</li>
+                  <li><strong>Fixed Seat:</strong> Mount the L-shaped seat directly onto this horizontal bar. This ensures the seat is 100% rigid and cannot sway.</li>
+                  <li><strong>Visual Illusion:</strong> Attach non-load-bearing ropes from the top beam to the seat holes. Pull them taut to mimic the tension of a real swing.</li>
+                  <li><strong>Simplicity:</strong> Connect the horizontal bar to the legs using simple screws or carriage bolts (lap joint) to avoid complex joinery.</li>
+                </ol>
+                This approach satisfies the safety requirement (immovable) and the visual requirement (looks like a swing), achievable with basic tools.
+                <span class="answer-mark wrong-mark">&#10007; Failed</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- Data Examples Showcase -->
+  <section class="section">
+    <div class="container is-max-widescreen">
+      <div class="columns is-centered">
+        <div class="column">
+          <h2 class="title is-3 has-text-centered">Data Examples</h2>
+          <div class="content has-text-justified" style="margin-bottom: 2rem;">
+            <p>Selected examples from the AgentVista benchmark spanning 7 domains. Each example shows the task question, input images, ground-truth answer, and domain/subdomain classification.</p>
+          </div>
+
+          <!-- Domain Filter Buttons -->
+          <div class="tab-buttons" style="margin-bottom: 2rem;" id="showcase-filters">
+            <button class="tab-btn active" onclick="filterShowcase(this, 'all')">All</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'academics')">Academics (3)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'commerce')">Commerce (7)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'culture')">Culture (3)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'entertainment')">Entertainment (7)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'geography')">Geography (5)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'society')">Society (5)</button>
+            <button class="tab-btn" onclick="filterShowcase(this, 'technology')">Technology (4)</button>
+          </div>
+
+          <div class="showcase-grid" id="showcase-grid">
+            <!-- mmagent_2 -->
+            <div class="showcase-card" data-domain="academics">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #6366f1;">Academics</span>
+                <span class="showcase-subdomain">Mathematical and Algorithmic Computation</span>
+                <span class="showcase-id">#2</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/03a855d6411967cc3399f1c43628f3fe.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am currently working on this math problem: Let the figure correspond to the n-th iteration of the Sierpiński triangle. Calculate the sum of the number of smallest triangles from the 0-th iteration to the (n+1)-th iteration, and output the integer S.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 9841
+              </div>
+            </div>
+
+            <!-- mmagent_34 -->
+            <div class="showcase-card" data-domain="academics">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #6366f1;">Academics</span>
+                <span class="showcase-subdomain">Mathematical and Algorithmic Computation</span>
+                <span class="showcase-id">#34</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/2069e94028db5370c4152fcd3094ab46.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am analyzing this attention visualization for a Transformer base model where the highlighted word on the left serves as the query. Based on the yellow connections visible in the diagram including the self-pointing link, assume that each connection belongs to exactly one of the attention heads as illustrated. I need to calculate the total number of scalar multiplications required specifically for the QK⊤QK^\topQK⊤ and Attn⋅V\text{Attn}\cdot VAttn⋅V
+ operations in this single forward pass. Please provide only the final integer result while ignoring softmax, additions, and linear projections.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 1792
+              </div>
+            </div>
+
+            <!-- mmagent_159 -->
+            <div class="showcase-card" data-domain="academics">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #6366f1;">Academics</span>
+                <span class="showcase-subdomain">Mathematical and Algorithmic Computation</span>
+                <span class="showcase-id">#159</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/be29a7e3139b9b947a768de41c5ce7ca.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/09b08c205980f2440294c3dd41534419.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> This is the floor plan of my home in Beijing, and I now need to calculate the total cost for the renovation. My renovation arrangements are as follows:Install security doors for the doors connecting to the outside, and use wooden doors for all other doors (including standard doors, sliding doors, folding doors, etc.);For rooms where most of the area is directly exposed to sunlight at noon on the Spring Equinox, use wooden flooring; for the rest of the rooms, use marble flooring;Other parts are not included in the cost, and only material costs will be calculated—installation labor fees and shipping costs are not considered.All the above costs are based on the final selling prices in the second image, and the unit price of flooring is in yuan per square meter. Please help me calculate the total renovation cost(in RMB), rounded to the nearest whole number.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 20113
+              </div>
+            </div>
+
+            <!-- mmagent_43 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Value Optimization and Discounts</span>
+                <span class="showcase-id">#43</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/e49f2a18c31002ec1456bc983c73f69c.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am shopping for my three nephews with a total budget of S$1,000 and want to buy LEGO sets from this Black Friday catalog. I can purchase a maximum of three units for any single item. My objective is to maximize the total piece count across all gifts to ensure the longest play time for the children. Given this goal and my budget constraints, what is the total amount of money saved by utilizing the Black Friday discounts compared to the original prices?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> (469.90 - 300.55) * 2 + (43.90 - 34.00) * 1 + (79.90 - 56.90) * 2 + (124.90-83.30) * 3 = 519.4
+              </div>
+            </div>
+
+            <!-- mmagent_91 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Financial Analysis and Valuation</span>
+                <span class="showcase-id">#91</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/fc3b9bf9ecf669e41baf6365fa5ce6e0.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> property on Grove in London&#x27;s N3 district. According to British building regulations regarding the minimum bedroom area, if this is a first home, how many rooms in this property legally meet the criteria for being a bedroom? Using the current average house price per square foot in the N3 district, what is the stamp duty that a first-time buyer would need to pay in pounds? (Rounded up to the nearest pound)
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 6, 50, 932
+              </div>
+            </div>
+
+            <!-- mmagent_100 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Product Selection and Specification</span>
+                <span class="showcase-id">#100</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/14fc5497b679663ef09d82a24f4537e1.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am a jewelry maker planning to use the opal chips from this catalog to create birthstone jewelry for October 2025. The birthstone for October is opal. I specifically need opals with a blue tone that are not multicolored varieties (those without the &quot;Multi-&quot; prefix in their names). Among all the pure blue opals displayed in this catalog, what is the lowest price per gram based on the pricing of opal chips on October 1, 2025? Please express it in US dollars per gram.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> $4.95 per gram
+              </div>
+            </div>
+
+            <!-- mmagent_132 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Product Selection and Specification</span>
+                <span class="showcase-id">#132</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/34ee4bbb9e1a83d03758b0c271391931.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I plan to take a combination of three medications for one week to treat my cold symptoms, which include fever, headache, nasal congestion, runny nose, dry cough, and sore throat. I strictly want to avoid drugs containing Western medicinal ingredients, and I am allergic to Vitamin C. Please identify the three suitable medications from the image and tell me the minimum number of boxes I need to purchase for a one-week course, calculated based on the minimum recommended adult dosage and rounding up any partial boxes to the nearest whole box.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 3 boxes of Lianhua Qingwen Granules, 5 boxes of Pudilan Xiaoyan Tablets, and 3 boxes of Zhike Juhong Pills.
+              </div>
+            </div>
+
+            <!-- mmagent_133 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Product Selection and Specification</span>
+                <span class="showcase-id">#133</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/aff7a7b1b6ec84cb8710178c53fced97.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/5dfc34a9776a88bfc662f4ce68e5a786.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> Please compare two photos of 7-Eleven beverage refrigerators. In the left image (which shows 10 empty slots), I want to fill the empty positions with drinks that appear in the right image (which is almost fully stocked) but are not present in the left image. Each drink occupies one slot, and all drinks are assumed to have the same volume.
+My filling method is as follows:
+ For the empty spaces in the left image, fill them layer by layer (each layer completely filled before moving to the next), starting from the top layer and proceeding downward (there are 7 layers in total). Within each layer, fill from left to right.
+For drinks that exist only in the right image (i.e., not found in the left image), the selection order is:
+Lower price first
+If prices are the same, choose the one with lower carbohydrate content (per 100 g)
+(Prices are based on the labeled retail price.)
+Question:
+ After the filling process is completed (i.e., the left refrigerator is fully stocked), which beverage is placed in the empty slot immediately to the right of the “Dodo Green Tea (Passion Fruit Flavor)” in the left image?
+ Please give the brand name of that beverage.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Fami Tea Series - Duoduo Green Tea
+              </div>
+            </div>
+
+            <!-- mmagent_194 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Product Selection and Specification</span>
+                <span class="showcase-id">#194</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/3ad0f8227739c4004cf0622d04b6a4e2.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/2f279636fd9e6a29279335c04dd052b6.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/a0b5d607484cea4b18ddda3108ce2523.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/4e2281247223a456cf9b3f7dd012ca26.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/9f3916741d3f3661de9dbb93950947b1.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I just purchased these sneakers on a second-hand resale platform. Acting as a senior sneaker authentication expert, please determine whether these shoes are authentic or fake; clearly state your conclusion and list two pieces of evidence to support your judgment.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Counterfeit.
+Basis for judgment (answer any two):
+
+1. Wrong Inside Tongue Color
+2. Top of Tongue Off
+Netting Off
+              </div>
+            </div>
+
+            <!-- mmagent_202 -->
+            <div class="showcase-card" data-domain="commerce">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #f59e0b;">Commerce</span>
+                <span class="showcase-subdomain">Product Selection and Specification</span>
+                <span class="showcase-id">#202</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/406c44695397a9344a5ce3449a3e1276.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/68c65b1032043a538cbe85862b884d4e.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/7d82c0bd39f3eae98f1678af11f0502a.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/7ae9bb695ab3fba61c848207795dd256.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am considering purchasing the pre-owned watch shown in the picture. Please tell me if this watch is authentic and provide at least one piece of evidence that directly supports your conclusion.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Counterfeit. Basis (either answer is acceptable):
+
+1. The back of the watch is engraved with the word &quot;VERMEIL&quot;. The authentic product should be made of &quot;gold-plated silver&quot; material (with a golden appearance), but the watch shown in the picture is silver, and there is a contradiction between the material and the label;
+2. The screws at the four corners of the back of the watch have flat printing/laser etching patterns, rather than real physical screws.
+              </div>
+            </div>
+
+            <!-- mmagent_5 -->
+            <div class="showcase-card" data-domain="culture">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ec4899;">Culture</span>
+                <span class="showcase-subdomain">Artifact Appraisal and Craftsmanship</span>
+                <span class="showcase-id">#5</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/b29c1079d13e3bd9658e2a3a785bfa1a.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/440665d0a955cd31a47ac7e6ee268f20.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/6b71a35c6e2ca2a4582871a9b9369a93.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/c4f6161b82c5c2b0e40e13f70bd2eefd.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/609e542118b7f2776328a9e78834a7ca.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/a7abda52c9db25042d2ed0e8e9c58f96.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/49afba0be6f167cf2b9db8e4476266e6.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/76205d9c6d0dd605cf346f4a4c9b165a.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/49e3ee56d7f0a10b5d87a29697263901.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/858d41677df83efe1bca43d188f5ac9f.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I’ve been sorting through these old photos of bronze vessels for my archaeology lab assignment. There are ten items labeled a to j and I need to divide them into five distinct groups based on their shape and decorative style. I&#x27;m mainly focusing on things like the body structures, the leg designs, and how the patterns are carved. These old catalog clippings are pretty grainy so it&#x27;s getting a bit difficult to keep track of the details. Could you help me pair them up and list out the five groups using their letters?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> (1) a, f; (2) e, h; (3) b, j; (4) c, g; (5) d, i
+              </div>
+            </div>
+
+            <!-- mmagent_117 -->
+            <div class="showcase-card" data-domain="culture">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ec4899;">Culture</span>
+                <span class="showcase-subdomain">Cultural Knowledge and History</span>
+                <span class="showcase-id">#117</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/d001e15b470c55bd56272aa6427a6d09.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> Among all the Nobel Prize in Literature winning authors whose books are visible in this exhibition area, which author has more books of their works in this exhibition area?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> J. M. G. Le Clézio
+              </div>
+            </div>
+
+            <!-- mmagent_208 -->
+            <div class="showcase-card" data-domain="culture">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ec4899;">Culture</span>
+                <span class="showcase-subdomain">Cultural Knowledge and History</span>
+                <span class="showcase-id">#208</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/267a25e1ea88b40ac0eec95365edba4c.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/5fb1734868b746bc4d1f1d431c2db659.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/74008e3a11c4f52439bbfb54c35026c4.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/24e95f4e678d1c71ae10eda0342a7bd9.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/03db7d11a3675223684b49f72029fb3f.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am examining these three heraldic shields to understand their shared design elements and unique variations. I need you to identify the specific shared design among these images and explain the differences in their rim decorations. Furthermore, please determine who originally granted the specific coronet design that appears most frequently in these three examples.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 1. The Coronet
+2. Differenced with maple leaves on the rim
+3. The Lord Lyon
+              </div>
+            </div>
+
+            <!-- mmagent_36 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Sports Analytics and Rules</span>
+                <span class="showcase-id">#36</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/9283867bed0d79dd2c10ec94558d0101.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> Looking at the distribution of &#x27;P&#x27; (Personal Drinks) stations on this 2012 London Marathon course map, I want to calculate the supply requirements for an elite athlete. If the runner takes equal amounts of isotonic drink only at these specific stations and strictly adheres to standard endurance carbohydrate intake strategies, how much beverage in milliliters should be prepared at each station? Please use the official finishing time of the men&#x27;s champion from that year as your reference and provide the final result as a single integer.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 238
+              </div>
+            </div>
+
+            <!-- mmagent_62 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Sports Analytics and Rules</span>
+                <span class="showcase-id">#62</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/3685dbd93a9aa33a2d43e80214b98ce9.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/561084d8f0752a059c7d7c284fc48883.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I want to know how well the player going for the layup in the picture performed in this game. How much does his game eFG% differ from the eFG% computed from the shot chart?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 13.8%
+              </div>
+            </div>
+
+            <!-- mmagent_95 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Tabletop and Board Games</span>
+                <span class="showcase-id">#95</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/fc93f749ffc1ec1ccceb61af8985fa68.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> This is an ongoing Scrabble game. The left image shows my current letter rack, and the right image shows the current board state. Considering all valid English Scrabble words that can be formed with the letters in my hand, all possible positions where words can be legally placed and connected to existing words on the board, and all bonus squares, what is the maximum possible score I can get in one turn, and from the perspective of getting more points in the future, what word should I form?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 14, ZOEAE
+              </div>
+            </div>
+
+            <!-- mmagent_102 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Media and Hobby Curation</span>
+                <span class="showcase-id">#102</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/a0f211db157d5f8545b697bf196162bf.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> This image shows someone&#x27;s media collection, including anime, movies, video games, music albums, and books. Among all items in this collection that were released before 2010 and have a rating higher than 80% (or equivalent to 8/10) on their respective rating platforms (such as Metacritic, IMDb, or MyAnimeList), which work has the earliest original release year?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> The Call of Cthulhu
+              </div>
+            </div>
+
+            <!-- mmagent_156 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Media and Hobby Curation</span>
+                <span class="showcase-id">#156</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/025f6f2f17151315c3dccd8eb846c987.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/ccb3758c30fd39ded558d22f0dd1040d.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am studying photo post-processing and tonal adjustments.
+ Please compare the two images and determine, from the first image to the second image, the direction of adjustment for each of the following parameters (only indicate whether the change is positive or negative, where positive means an increase and negative means a decrease):
+Exposure
+Contrast
+Highlights
+Shadows
+Whites
+Blacks
+Highlight tone / color grading (Highlights)
+Shadow tone / color grading (Shadows)
+Answer template: 
+Exposure: +
+Contrast: +
+...
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Exposure: -
+Contrast: +
+Highlights: -
+Shadows: +
+Whites: -
+Blacks: +
+Highlight tone / color grading (Highlights): +
+Shadow tone / color grading (Shadows): -
+              </div>
+            </div>
+
+            <!-- mmagent_166 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Sports Analytics and Rules</span>
+                <span class="showcase-id">#166</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/fae2a8cab28eddb3926557dd10b14952.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I’m a beginner skier and it’s my first time at a ski resort. I plan to ski on alpine skis (double boards) with the following itinerary: first, ski a total distance of 1km in the training area; then, ski each beginner slope with an angle of 8 degrees or more once; finally, ski each of the steepest intermediate slopes once. Please help me calculate the minimum total distance I will ski and the number of chairlift rides required.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> distance: 4705m
+chairlift rides required: 4
+              </div>
+            </div>
+
+            <!-- mmagent_167 -->
+            <div class="showcase-card" data-domain="entertainment">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #10b981;">Entertainment</span>
+                <span class="showcase-subdomain">Sports Analytics and Rules</span>
+                <span class="showcase-id">#167</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/dbdb8637fcf043a90703c82dcc6a781e.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/cdbde225f031785f5513856a2ecabbb1.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> How many independent shooting zone units are there in the area where the assist rate is less than 48%?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 49
+              </div>
+            </div>
+
+            <!-- mmagent_48 -->
+            <div class="showcase-card" data-domain="geography">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #3b82f6;">Geography</span>
+                <span class="showcase-subdomain">Route Planning and Navigation</span>
+                <span class="showcase-id">#48</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/a034295ffa0e2619ae09394ac29049de.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I’m a student at the HKUST, and in 2025 Fall semester I’m renting a place in Central to make job hunting easier. On school days, I usually take the MTR from Central to Hang Hau, then transfer to the cheapest minibus from Hang Hau to HKUST in the morning. At night, I take the shuttle bus from HKUST to Tseung Kwan O, then the MTR from Tseung Kwan O back to Central. Using the attached HKUST transportation map, please help me calculate my total commuting cost in that semester (in HKD)，assuming I pay with a student Octopus card.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 25.8hkd
+              </div>
+            </div>
+
+            <!-- mmagent_88 -->
+            <div class="showcase-card" data-domain="geography">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #3b82f6;">Geography</span>
+                <span class="showcase-subdomain">Route Planning and Navigation</span>
+                <span class="showcase-id">#88</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/05ecea04cfd402763d24ba673ec6c9fe.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> Now Bob is going to start from the hotel, take his child John to the dentist, and then send John to the childcare center. However, after seeing the dentist, his mother Mary asked William to go to the place marked by the red arrow to get the childcare permit from Charles, and then go to the childcare center. How many extra kilometers does Bob have to walk because of this?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 0.7 miles
+              </div>
+            </div>
+
+            <!-- mmagent_90 -->
+            <div class="showcase-card" data-domain="geography">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #3b82f6;">Geography</span>
+                <span class="showcase-subdomain">Thematic Map Interpretation</span>
+                <span class="showcase-id">#90</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/1e838f4515e145bec9768186631446a5.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I&#x27;m moving to this city and need to find an apartment to rent in a residential community. I prefer areas with a crime rate lower than the average, and I hope the commuting time to the city center hospital by public transportation is within 20 minutes. Then, I&#x27;d like to choose residential communities with an overall lower average rent. Which two residential communities should I choose? (Provide two answers)
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Carolina Place / Ardmore
+              </div>
+            </div>
+
+            <!-- mmagent_108 -->
+            <div class="showcase-card" data-domain="geography">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #3b82f6;">Geography</span>
+                <span class="showcase-subdomain">Thematic Map Interpretation</span>
+                <span class="showcase-id">#108</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/65aa72aaba9fc6cbbe6c703ded884ae7.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> In this map of UK election results, which single labeled area has the highest number of Labour Party (red) seats per 100,000 residents?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Norwich
+              </div>
+            </div>
+
+            <!-- mmagent_129 -->
+            <div class="showcase-card" data-domain="geography">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #3b82f6;">Geography</span>
+                <span class="showcase-subdomain">Route Planning and Navigation</span>
+                <span class="showcase-id">#129</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/ed7259039d2d5c41401e57174c50c274.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> An elderly gentleman using a wheelchair needs to transfer from the Ginza Line (bound for Asakusa) to the Fukutoshin Line (bound for Yokohama). He cannot use stairs or escalators. Since his wheelchair has limited capability to turn left, please help select a route that requires the fewest 90-degree left turns. Additionally, please calculate the total number of left and right turns required (excluding maneuvers inside elevators).
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 3 left, 8 right
+              </div>
+            </div>
+
+            <!-- mmagent_6 -->
+            <div class="showcase-card" data-domain="society">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #8b5cf6;">Society</span>
+                <span class="showcase-subdomain">Manual Assembly and Troubleshooting</span>
+                <span class="showcase-id">#6</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/02e27d567c238b1d92d1bd471d8b3b7f.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/865d28831dc5b4182c6508072fd13106.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I&#x27;m currently assembling this IKEA drawer unit. I thought I was following the steps correctly, but my result in Fig 2 looks &#x27;off&#x27; compared to the reference in Fig 1. Can you pinpoint exactly what I did wrong? Also, please check the assembly manual (https://www.ikea.com/us/en/assembly_instructions/alex-drawer-unit-white__AA-2242840-5-100.pdf) and tell me on which page I can find the instructions to fix this specific mistake without having to dismantle the entire outer frame?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> The back panel of the drawer is installed backwards. Refer to page 14 of the manual.
+              </div>
+            </div>
+
+            <!-- mmagent_8 -->
+            <div class="showcase-card" data-domain="society">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #8b5cf6;">Society</span>
+                <span class="showcase-subdomain">Manual Assembly and Troubleshooting</span>
+                <span class="showcase-id">#8</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/7715f97e38b2b89f14a47eb51cca4504.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/13d8ca6654c7656162c052b4feb61234.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/d724fffb83f738af785a14f4e9135377.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I&#x27;m working on this massive LEGO castle, but I&#x27;ve hit a wall with these yellow pieces. Every time I try to snap them on, they either collide with the surrounding grey bricks or just won&#x27;t seat properly. I must be looking at the wrong section of the manual. Could you help me cross-reference the assembly guide for this model and tell me which of the following areas is the correct designated spot for these parts?
+Options:
+A. Next to the four yellow squares on top of the flanking circular towers.
+B. On the lower castle walls, serving as decorative exterior sconces.
+C. Inside the four recessed grooves/studs in the center of the main building&#x27;s grey roof.
+D. At the very front of the grey roof, mounted on the railing-like elements.
+E. Within the rock crevices of the unfinished ruin on the right side of the photo.
+Please analyze the current build progress in the photo and the manual to provide the correct answer.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> C
+              </div>
+            </div>
+
+            <!-- mmagent_16 -->
+            <div class="showcase-card" data-domain="society">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #8b5cf6;">Society</span>
+                <span class="showcase-subdomain">Horticulture and Plant Care</span>
+                <span class="showcase-id">#16</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/9a2880722a16faa4c55936b7fd26bbe3.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/0314e844feddcc824c3a8383814201aa.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/d722028cf246f9a81ab5f9b6a0399441.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I  was repotting my Pilea and was shocked to find this large white mass at the base of the roots. I poked it with tweezers and found it is not soft or squishy at all. It did not burst; instead, it feels quite hard and crusty like a dried-up scab. For context, I accidentally overwatered this plant severely about two months ago. It lost several leaves but eventually stabilized. Based on the image and this history, what exactly is this substance and do I need to apply any pesticides?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> No pesticide needed. This is calloused or crustified root rot residue from the previous overwatering incident.
+              </div>
+            </div>
+
+            <!-- mmagent_59 -->
+            <div class="showcase-card" data-domain="society">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #8b5cf6;">Society</span>
+                <span class="showcase-subdomain">Health and Culinary</span>
+                <span class="showcase-id">#59</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/e1817a0da00b83d60eee2740d7e13190.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/4617ba1b7c6e775588e87a494beb9ee4.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> These photos show the exterior of a bar I visited before, along with the cocktail I ordered there. I’d like to recreate this cocktail now—based on its official recipe, please tell me the two ingredients used in the largest amounts and their exact quantities (in oz).
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 1 oz. bourbon
+2/3 oz. Italian brandy
+              </div>
+            </div>
+
+            <!-- mmagent_181 -->
+            <div class="showcase-card" data-domain="society">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #8b5cf6;">Society</span>
+                <span class="showcase-subdomain">Health and Culinary</span>
+                <span class="showcase-id">#181</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/299cc8cbfc19a9ce6283b4b3136e19f4.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/788503ba165bcebff195565d0041c5bc.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am preparing for a trip to Japan in 2025. Please look up the specific regulations regarding psychotropic drugs for entering Japan, confirm which of my medications fall under the controlled scope, and identify the maximum quantity (boxes/bottles) I can carry without applying for an &quot;Import Confirmation Certificate.&quot; Please provide the answer in the &quot;Drug Name - Maximum Quantity&quot; format.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Lorazepam - 4 bottles
+              </div>
+            </div>
+
+            <!-- mmagent_38 -->
+            <div class="showcase-card" data-domain="technology">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ef4444;">Technology</span>
+                <span class="showcase-subdomain">Engineering Design and Analysis</span>
+                <span class="showcase-id">#38</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/2f1d9fd66d2fa59a8f7035c077c5bd38.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> To ensure operational efficiency until 11:35 AM, I need to determine the minimum number of announcers required to handle the flight schedule shown on the departure board. Each flight requires a 30-second live announcement at its corresponding gate area at the exact &#x27;Expected&#x27; time. An announcer must start at the main dashboard, walk to the designated gate, perform the 30-second announcement, and return to the main dashboard before they are available for the next assignment. Please use the &#x27;Walking time&#x27; matrix on the right to account for one-way travel times between the dashboard and each gate. Given that one announcer can only be at one location at a time, what is the minimum number of staff members needed to cover all scheduled tasks?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 7
+              </div>
+            </div>
+
+            <!-- mmagent_120 -->
+            <div class="showcase-card" data-domain="technology">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ef4444;">Technology</span>
+                <span class="showcase-subdomain">Technical Benchmarking and Evaluation</span>
+                <span class="showcase-id">#120</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/2bee90633324f08d7849d5d7a9ab0da1.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I want to find the most suitable parameter-efficient open-source vision model for deployment. Among all models with open-source licenses (Apache-2.0 or LLAMA 2 Community License) and an MMMU score exceeding 35, which model has the highest Arena Elo score per billion parameters?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Qwen2‑VL‑7B‑Instruct
+              </div>
+            </div>
+
+            <!-- mmagent_150 -->
+            <div class="showcase-card" data-domain="technology">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ef4444;">Technology</span>
+                <span class="showcase-subdomain">Hardware Troubleshooting and Maintenance</span>
+                <span class="showcase-id">#150</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/0a5180254cf303d1e3cb568286d573e6.png" alt="Input image" loading="lazy">
+                <img src="static/images/showcase/2dd7c9252b4a5e1130747e239c09b9f7.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am planning to add a digital microphone interface to this board without desoldering the main module, but I first need a reliable way to identify which ESP32 pins are connected to these specific pads. Since visual inspection is insufficient to determine their functions, I need a logical methodology to map these pads back to the module to verify if they support I2S signals for audio. Given that I have a multimeter and access to the official module datasheet, what is the most effective path to confirm these hardware connections without damaging the device?
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> Consult the module datasheet for the pinout and use a multimeter in continuity mode to trace the physical pads back to their respective module pins.
+              </div>
+            </div>
+
+            <!-- mmagent_168 -->
+            <div class="showcase-card" data-domain="technology">
+              <div class="showcase-header">
+                <span class="showcase-domain" style="background: #ef4444;">Technology</span>
+                <span class="showcase-subdomain">Engineering Design and Analysis</span>
+                <span class="showcase-id">#168</span>
+              </div>
+              <div class="showcase-images">
+                <img src="static/images/showcase/c9bc2514d4589bb72064bc24cc3bda0f.png" alt="Input image" loading="lazy">
+              </div>
+              <div class="showcase-question">
+                <strong>Question:</strong> I am assembling a simple transmission model, and the figure above shows my target structure. During the gear installation process, I reversed the mounting positions of the No. 2 and No. 3 gray gears (marked with numbers in the figure). The size ratio of the gears is designed based on the first-generation Suzuki Alto. Please tell me what the actual corresponding gear positions are when the original shift lever is moved to 1st, 2nd, 3rd, 4th and R gears in this installation mode.
+              </div>
+              <div class="showcase-answer">
+                <strong>Answer:</strong> 1, 3, 2, 4, R
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- BibTeX Citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{su2026agentvista,
+  title={AgentVista: Evaluating Multimodal Agent in Ultra-Challenging Realistic Visual Scenarios},
+  author={Su, Zhaochen and Gao, Jincheng and Guo, Hangyu and Liu, Zhenhua and Zhang, Lueyang and Geng, Xinyu and Huang, Shijue and Xia, Peng and Jiang, Guanyu and Wang, Cheng and Zhang, Yue and Fung, Yi R. and He, Junxian},
+  booktitle={Preprint},
+  year={2026}
+}</code></pre>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Case study switching
+    function showCase(btn, caseId) {
+      document.querySelectorAll('.case-content').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      // Only deactivate case buttons (parent section)
+      btn.parentElement.querySelectorAll('.tab-btn').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      document.getElementById(caseId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Data showcase domain filter
+    function filterShowcase(btn, domain) {
+      var cards = document.querySelectorAll('.showcase-card');
+      cards.forEach(function(card) {
+        if (domain === 'all' || card.getAttribute('data-domain') === domain) {
+          card.setAttribute('data-hidden', 'false');
+          card.style.display = '';
+        } else {
+          card.setAttribute('data-hidden', 'true');
+          card.style.display = 'none';
+        }
+      });
+      var filters = document.getElementById('showcase-filters');
+      filters.querySelectorAll('.tab-btn').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+
+    // Tab switching
+    function showTab(btn, tabId) {
+      document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
